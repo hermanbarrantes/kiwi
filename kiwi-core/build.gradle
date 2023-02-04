@@ -1,0 +1,22 @@
+plugins {
+    id 'groovy'
+    id 'java-library'
+}
+
+version = '0.0.1'
+group = 'com.mihtan.kiwi'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':kiwi-api')
+    testImplementation 'org.codehaus.groovy:groovy:3.0.13'
+    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
