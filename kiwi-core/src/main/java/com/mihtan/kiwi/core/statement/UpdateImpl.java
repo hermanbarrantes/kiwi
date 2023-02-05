@@ -1,5 +1,6 @@
 package com.mihtan.kiwi.core.statement;
 
+import com.mihtan.kiwi.api.mapper.RowMapper;
 import com.mihtan.kiwi.api.statement.StatementException;
 import com.mihtan.kiwi.api.statement.Update;
 import java.sql.Connection;
@@ -31,34 +32,18 @@ public class UpdateImpl extends BaseStatement<Update> implements Update {
     }
 
     @Override
-    public <T> T executeWithKey(String name, Class<T> clazz) {
+    public <T> T executeWithKey(RowMapper<T> rowMapper) {
         try ( var ps = connection.prepareStatement(sql, RETURN_GENERATED_KEYS)) {
             applyParameters(ps);
-            ps.executeUpdate();
-            try ( var rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getObject(name, clazz);
-                } else {
-                    throw new StatementException("No generated keys");
-                }
+            int rowCount = ps.executeUpdate();
+            if(rowCount != 1) {
+                throw new StatementException("Not only one row was affected");
             }
-        } catch (StatementException ex) {
-            throw ex;
-        } catch (SQLException ex) {
-            throw new StatementException(ex);
-        }
-    }
-
-    @Override
-    public <T> T executeWithKey(int index, Class<T> clazz) {
-        try ( var ps = connection.prepareStatement(sql, RETURN_GENERATED_KEYS)) {
-            applyParameters(ps);
-            ps.executeUpdate();
             try ( var rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getObject(index, clazz);
+                    return rowMapper.map(rs);
                 } else {
-                    throw new StatementException("No generated keys");
+                    throw new StatementException("No keys generated");
                 }
             }
         } catch (StatementException ex) {

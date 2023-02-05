@@ -27,14 +27,14 @@ public class Kiwi {
     private final TransactionManagerFactory transactionManagerFactory;
     private final HandlerFactory handleFactory;
 
-    private Kiwi(ConnectionFactory connectionFactory, TransactionManagerFactory transactionManagerFactory, HandlerFactory handleFactory) {
-        this.connectionFactory = Objects.requireNonNull(connectionFactory, "null connectionFactory");
-        this.transactionManagerFactory = Objects.requireNonNull(transactionManagerFactory, "null transactionManagerFactory");
-        this.handleFactory = Objects.requireNonNull(handleFactory, "null handleFactory");
+    private Kiwi(KiwiBuilder builder) {
+        this.connectionFactory = Objects.requireNonNull(builder.connectionFactory, "null connectionFactory");
+        this.transactionManagerFactory = Objects.requireNonNull(builder.transactionManagerFactory, "null transactionManagerFactory");
+        this.handleFactory = Objects.requireNonNull(builder.handleFactory, "null handleFactory");
     }
 
     public static Kiwi create(ConnectionFactory connectionSupplier) {
-        return new Kiwi(connectionSupplier, LocalTransactionManager::new, HandlerImpl::new);
+        return new KiwiBuilder(connectionSupplier).build();
     }
 
     public static Kiwi create(DataSource dataSource) {
@@ -95,7 +95,7 @@ public class Kiwi {
         }
 
         public Kiwi build() {
-            return new Kiwi(connectionFactory, transactionManagerFactory, handleFactory);
+            return new Kiwi(this);
         }
     }
 }

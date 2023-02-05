@@ -18,10 +18,10 @@ public class Library {
                 .build();
         Kiwi kiwi = Kiwi.create(() -> null);
         List<String> list = kiwi.call(handle -> {
-            handle
+            Long key = handle
                     .createUpdate("INSERT INTO TEST(NAME) VALUES (?)")
                     .setString("Hola")
-                    .execute();
+                    .executeWithKey(1, Long.class);
             handle
                     .createCall("{call SP(?)}")
                     .setString("Hola")
