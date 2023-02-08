@@ -1,10 +1,10 @@
 package com.mihtan.kiwi.core.statement;
 
 import com.mihtan.kiwi.api.statement.Call;
-import com.mihtan.kiwi.api.statement.NameParameterSetter;
 import com.mihtan.kiwi.api.statement.StatementException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import com.mihtan.kiwi.api.statement.CallParameterSetter;
 
 /**
  *
@@ -21,7 +21,7 @@ public class CallImpl extends BaseStatement<Call> implements Call {
     }
 
     @Override
-    public Call setParamenter(NameParameterSetter parameterSetter) {
+    public Call setParamenter(CallParameterSetter parameterSetter) {
         return this;
     }
 

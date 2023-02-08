@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * @author herman
  */
 @FunctionalInterface
-public interface NameParameterSetter {
+public interface CallParameterSetter {
 
     void setParameter(CallableStatement statement) throws SQLException;
 

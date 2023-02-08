@@ -26,7 +26,7 @@ public class Library {
                     .createCall("{call SP(?)}")
                     .setString("Hola")
                     .setBoolean("ACTIVE", true)
-//                    .setOutParamenter("OUT", Types.VARCHAR)
+                    .setOutParamenter("OUT", Types.VARCHAR)
                     .execute();
             return handle
                     .createQuery("SELECT NAME FROM TEST WHERE NAME LIKE ?")

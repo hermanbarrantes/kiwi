@@ -10,9 +10,8 @@ import com.mihtan.kiwi.api.transaction.TransactionManager;
 import com.mihtan.kiwi.api.transaction.TransactionManagerFactory;
 import com.mihtan.kiwi.core.handler.HandlerImpl;
 import com.mihtan.kiwi.core.transaction.LocalTransactionManager;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Objects;
 import javax.sql.DataSource;
 
@@ -22,7 +21,6 @@ import javax.sql.DataSource;
  */
 public class Kiwi {
 
-    private static final Logger LOG = System.getLogger(Kiwi.class.getName());
     private final ConnectionFactory connectionFactory;
     private final TransactionManagerFactory transactionManagerFactory;
     private final HandlerFactory handleFactory;
@@ -40,7 +38,7 @@ public class Kiwi {
     public static Kiwi create(DataSource dataSource) {
         return create(dataSource::getConnection);
     }
-    
+
     public static KiwiBuilder withConnectionFactory(ConnectionFactory connectionFactory) {
         return new KiwiBuilder(connectionFactory);
     }
@@ -61,11 +59,7 @@ public class Kiwi {
             } finally {
                 connectionFactory.closeConnection(connection);
             }
-        } catch (KiwiException ex) {
-            LOG.log(Level.ERROR, () -> "", ex);
-            throw ex;
-        } catch (Exception ex) {
-            LOG.log(Level.ERROR, () -> "", ex);
+        } catch (SQLException ex) {
             throw new KiwiException(ex);
         }
     }

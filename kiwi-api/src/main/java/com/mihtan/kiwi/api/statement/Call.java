@@ -1,6 +1,7 @@
 package com.mihtan.kiwi.api.statement;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -14,9 +15,7 @@ public interface Call extends Statement<Call> {
 
     void execute();
 
-//    Call setOutParamenter(String name, int type);
-//    Call setOutParamenter(int type);
-    Call setParamenter(NameParameterSetter parameterSetter);
+    Call setParamenter(CallParameterSetter parameterSetter);
 
     default Call setBoolean(String name, boolean value) {
         return setParamenter(s -> s.setBoolean(name, value));
@@ -228,18 +227,18 @@ public interface Call extends Statement<Call> {
         return setObject(name, value, Types.OTHER);
     }
 
-//    default Call setOutParamenter(String name, int type) {
-//        return setNameParamenter(s -> s.registerOutParameter(name, type));
-//    }
-//
-//    default Call setOutParamenter(int type) {
-//        return setParamenter((s, i) -> {
-//            if (s instanceof CallableStatement) {
-//                CallableStatement call = (CallableStatement) s;
-//                call.registerOutParameter(i, type);
-//            } else {
-//                //TODO check
-//            }
-//        });
-//    }
+    default Call setOutParamenter(String name, int type) {
+        return setParamenter(s -> s.registerOutParameter(name, type));
+    }
+
+    default Call setOutParamenter(int type) {
+        return setParamenter((s, i) -> {
+            if (s instanceof CallableStatement) {
+                CallableStatement call = (CallableStatement) s;
+                call.registerOutParameter(i, type);
+            } else {
+                throw new StatementException("");//TODO
+            }
+        });
+    }
 }

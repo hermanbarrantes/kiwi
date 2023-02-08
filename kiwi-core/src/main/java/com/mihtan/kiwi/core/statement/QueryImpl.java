@@ -1,13 +1,12 @@
 package com.mihtan.kiwi.core.statement;
 
 import com.mihtan.kiwi.api.mapper.RowMapper;
+import com.mihtan.kiwi.api.result.RowIterableCallback;
 import com.mihtan.kiwi.api.statement.Query;
 import com.mihtan.kiwi.api.statement.StatementException;
+import com.mihtan.kiwi.core.result.RowIterableImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -24,52 +23,12 @@ public class QueryImpl extends BaseStatement<Query> implements Query {
     }
 
     @Override
-    public <T> Optional<T> one(RowMapper<T> rowMapper) {
+    public <T, R> R iterate(RowMapper<T> rowMapper, RowIterableCallback<T, R> callback) {
         try ( var ps = connection.prepareStatement(sql)) {
             applyParameters(ps);
             try ( var rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    T result = rowMapper.map(rs);
-                    if (rs.next()) {
-                        throw new StatementException("more that one");
-                    }
-                    return Optional.ofNullable(result);
-                } else {
-                    return Optional.empty();
-                }
+                return callback.call(new RowIterableImpl<>(rs, rowMapper));
             }
-        } catch (StatementException ex) {
-            throw ex;
-        } catch (SQLException ex) {
-            throw new StatementException(ex);
-        }
-    }
-
-    @Override
-    public <T> Optional<T> first(RowMapper<T> rowMapper) {
-        try ( var ps = connection.prepareStatement(sql)) {
-            applyParameters(ps);
-            try ( var rs = ps.executeQuery()) {
-                return rs.next()
-                        ? Optional.ofNullable(rowMapper.map(rs))
-                        : Optional.empty();
-            }
-        } catch (SQLException ex) {
-            throw new StatementException(ex);
-        }
-    }
-
-    @Override
-    public <T> List<T> list(RowMapper<T> rowMapper) {
-        List<T> list = new ArrayList<>();
-        try ( var ps = connection.prepareStatement(sql)) {
-            applyParameters(ps);
-            try ( var rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    list.add(rowMapper.map(rs));
-                }
-            }
-            return list;
         } catch (SQLException ex) {
             throw new StatementException(ex);
         }

@@ -36,7 +36,7 @@ public class UpdateImpl extends BaseStatement<Update> implements Update {
         try ( var ps = connection.prepareStatement(sql, RETURN_GENERATED_KEYS)) {
             applyParameters(ps);
             int rowCount = ps.executeUpdate();
-            if(rowCount != 1) {
+            if (rowCount != 1) {
                 throw new StatementException("Not only one row was affected");
             }
             try ( var rs = ps.getGeneratedKeys()) {
@@ -46,8 +46,6 @@ public class UpdateImpl extends BaseStatement<Update> implements Update {
                     throw new StatementException("No keys generated");
                 }
             }
-        } catch (StatementException ex) {
-            throw ex;
         } catch (SQLException ex) {
             throw new StatementException(ex);
         }

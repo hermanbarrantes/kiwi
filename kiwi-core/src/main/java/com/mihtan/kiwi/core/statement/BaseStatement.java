@@ -34,5 +34,6 @@ public abstract class BaseStatement<T extends Statement<T>> implements Statement
         for (int i = 0; i < parameters.size(); i++) {
             parameters.get(i).setParameter(ps, i + 1);
         }
+        parameters.clear();
     }
 }
