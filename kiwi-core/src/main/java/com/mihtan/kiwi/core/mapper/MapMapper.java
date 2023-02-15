@@ -59,8 +59,13 @@ public class MapMapper implements RowMapper<Map<String, Object>> {
 
     @Override
     public Map<String, Object> map(ResultSet resultSet) throws SQLException {
+        // See http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
         if (null == columnNames) {
-            columnNames = getColumnNames(resultSet);
+            synchronized (this) {
+                if (null == columnNames) {
+                    columnNames = getColumnNames(resultSet);
+                }
+            }
         }
         Map<String, Object> row = new LinkedHashMap<>(columnNames.size());
         for (int i = 0; i < columnNames.size(); i++) {

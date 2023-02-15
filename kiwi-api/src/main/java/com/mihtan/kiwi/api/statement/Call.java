@@ -237,7 +237,7 @@ public interface Call extends Statement<Call> {
                 CallableStatement call = (CallableStatement) s;
                 call.registerOutParameter(i, type);
             } else {
-                throw new StatementException("");//TODO
+                throw new StatementException("Not a CallableStatement");
             }
         });
     }

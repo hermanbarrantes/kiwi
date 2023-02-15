@@ -12,9 +12,23 @@ repositories {
 
 dependencies {
     api project(':kiwi-api')
-    testImplementation 'org.codehaus.groovy:groovy:3.0.13'
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-3.0'
-    testImplementation 'junit:junit:4.13.2'
+    //spock framework
+    testImplementation platform('org.apache.groovy:groovy-bom:4.0.5')
+    testImplementation 'org.apache.groovy:groovy'
+    testImplementation platform('org.spockframework:spock-bom:2.3-groovy-4.0')
+    testImplementation 'org.spockframework:spock-core'
+    testImplementation 'org.spockframework:spock-junit4'
+    //testcontainers
+    implementation platform('org.testcontainers:testcontainers-bom:1.17.6')
+    testImplementation 'org.testcontainers:spock'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:mysql'
+    //utils
+    testImplementation 'com.zaxxer:HikariCP:5.0.1'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.6'
+    //drivers
+    testRuntimeOnly 'org.postgresql:postgresql:42.5.3'
+    testRuntimeOnly 'mysql:mysql-connector-java:8.0.32'
 }
 
 tasks.named('jar') {
@@ -26,4 +40,7 @@ tasks.named('jar') {
 
 tasks.named('test') {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

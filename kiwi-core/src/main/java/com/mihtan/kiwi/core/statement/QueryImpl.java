@@ -23,7 +23,7 @@ public class QueryImpl extends BaseStatement<Query> implements Query {
     }
 
     @Override
-    public <T, R> R iterate(RowMapper<T> rowMapper, RowIterableCallback<T, R> callback) {
+    public <T, R> R call(RowMapper<T> rowMapper, RowIterableCallback<T, R> callback) {
         try ( var ps = connection.prepareStatement(sql)) {
             applyParameters(ps);
             try ( var rs = ps.executeQuery()) {
