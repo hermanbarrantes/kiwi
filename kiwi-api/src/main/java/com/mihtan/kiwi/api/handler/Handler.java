@@ -10,9 +10,9 @@ import com.mihtan.kiwi.api.statement.Update;
  */
 public interface Handler {
 
-    Query createQuery(String sql);
+    Query query(String sql);
 
-    Update createUpdate(String sql);
+    Update update(String sql);
 
-    Call createCall(String sql);
+    Call call(String sql);
 }

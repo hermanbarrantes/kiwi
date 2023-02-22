@@ -10,7 +10,7 @@ import com.mihtan.kiwi.api.statement.CallParameterSetter;
  *
  * @author herman
  */
-public class CallImpl extends BaseStatement<Call> implements Call {
+public class CallImpl extends AbstractStatement<Call> implements Call {
 
     private final Connection connection;
     private final String sql;

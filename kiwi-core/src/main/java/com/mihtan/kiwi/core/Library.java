@@ -19,17 +19,17 @@ public class Library {
         Kiwi kiwi = Kiwi.create(() -> null);
         List<String> list = kiwi.call(handle -> {
             Long key = handle
-                    .createUpdate("INSERT INTO TEST(NAME) VALUES (?)")
+                    .update("INSERT INTO TEST(NAME) VALUES (?)")
                     .setString("Hola")
-                    .executeWithKey(1, Long.class);
+                    .executeAndGetKey();
             handle
-                    .createCall("{call SP(?)}")
+                    .call("{call SP(?)}")
                     .setString("Hola")
                     .setBoolean("ACTIVE", true)
                     .setOutParamenter("OUT", Types.VARCHAR)
                     .execute();
             return handle
-                    .createQuery("SELECT NAME FROM TEST WHERE NAME LIKE ?")
+                    .query("SELECT NAME FROM TEST WHERE NAME LIKE ?")
                     .setInt(1)
                     .setString("Hola", Types.VARCHAR)
                     .setObject(LocalDate.now(), Types.TIMESTAMP)

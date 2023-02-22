@@ -37,7 +37,7 @@ public class MapMapper implements RowMapper<Map<String, Object>> {
     }
 
     private final CaseStrategy caseStrategy;
-    private List<String> columnNames;
+    private volatile List<String> columnNames;
 
     public MapMapper() {
         this.caseStrategy = CaseStrategy.NONE;
@@ -60,16 +60,18 @@ public class MapMapper implements RowMapper<Map<String, Object>> {
     @Override
     public Map<String, Object> map(ResultSet resultSet) throws SQLException {
         // See http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
-        if (null == columnNames) {
+        List<String> localColumnNames = this.columnNames;
+        if (null == localColumnNames) {
             synchronized (this) {
-                if (null == columnNames) {
-                    columnNames = getColumnNames(resultSet);
+                localColumnNames = this.columnNames;
+                if (null == localColumnNames) {
+                    this.columnNames = localColumnNames = getColumnNames(resultSet);
                 }
             }
         }
-        Map<String, Object> row = new LinkedHashMap<>(columnNames.size());
-        for (int i = 0; i < columnNames.size(); i++) {
-            row.put(columnNames.get(i), resultSet.getObject(i + 1));
+        Map<String, Object> row = new LinkedHashMap<>(localColumnNames.size());
+        for (int i = 0; i < localColumnNames.size(); i++) {
+            row.put(localColumnNames.get(i), resultSet.getObject(i + 1));
         }
         return row;
     }

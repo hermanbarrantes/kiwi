@@ -12,7 +12,7 @@ import java.sql.SQLException;
  *
  * @author herman
  */
-public class QueryImpl extends BaseStatement<Query> implements Query {
+public class QueryImpl extends AbstractStatement<Query> implements Query {
 
     private final Connection connection;
     private final String sql;

@@ -22,17 +22,17 @@ public class HandlerImpl implements Handler {
     }
 
     @Override
-    public Query createQuery(String sql) {
+    public Query query(String sql) {
         return new QueryImpl(connection, sql);
     }
 
     @Override
-    public Update createUpdate(String sql) {
+    public Update update(String sql) {
         return new UpdateImpl(connection, sql);
     }
 
     @Override
-    public Call createCall(String sql) {
+    public Call call(String sql) {
         return new CallImpl(connection, sql);
     }
 

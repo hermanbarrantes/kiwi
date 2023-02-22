@@ -20,7 +20,7 @@ public interface Query extends Statement<Query> {
         call(rowMapper, consumer.asCallback());
     }
 
-    default <T> Optional<T> one(RowMapper<T> rowMapper) {
+    default <T> T one(RowMapper<T> rowMapper) {
         return call(rowMapper, it -> {
             var iterator = it.iterator();
             if (iterator.hasNext()) {
@@ -28,20 +28,26 @@ public interface Query extends Statement<Query> {
                 if (iterator.hasNext()) {
                     throw new StatementException("Too many results found");
                 }
-                return Optional.ofNullable(result);
+                return result;
             } else {
                 throw new StatementException("Result not found");
             }
         });
     }
 
-    default <T> Optional<T> first(RowMapper<T> rowMapper) {
+    default <T> Optional<T> findOne(RowMapper<T> rowMapper) {
+        return Optional.ofNullable(one(rowMapper));
+    }
+
+    default <T> T first(RowMapper<T> rowMapper) {
         return call(rowMapper, it -> {
             var iterator = it.iterator();
-            return iterator.hasNext()
-                    ? Optional.ofNullable(iterator.next())
-                    : Optional.empty();
+            return iterator.hasNext() ? iterator.next() : null;
         });
+    }
+
+    default <T> Optional<T> findFirst(RowMapper<T> rowMapper) {
+        return Optional.ofNullable(first(rowMapper));
     }
 
     default <T> List<T> list(RowMapper<T> rowMapper) {

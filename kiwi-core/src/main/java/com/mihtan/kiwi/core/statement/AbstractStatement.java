@@ -11,11 +11,11 @@ import java.util.List;
  *
  * @author herman
  */
-public abstract class BaseStatement<T extends Statement<T>> implements Statement<T> {
+public abstract class AbstractStatement<T extends Statement<T>> implements Statement<T> {
 
     private final List<ParameterSetter> parameters;
 
-    public BaseStatement() {
+    public AbstractStatement() {
         this.parameters = new ArrayList<>();
     }
 
