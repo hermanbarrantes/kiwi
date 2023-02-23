@@ -43,13 +43,13 @@ public class UpdateImpl extends AbstractStatement<Update> implements Update {
     }
 
     @Override
-    public Update mapKeys(String[] columnNames) {
+    public Update mapKeys(String... columnNames) {
         strategy = con -> con.prepareStatement(sql, columnNames);
         return this;
     }
 
     @Override
-    public Update mapKeys(int[] columnIndexes) {
+    public Update mapKeys(int... columnIndexes) {
         strategy = con -> con.prepareStatement(sql, columnIndexes);
         return this;
     }

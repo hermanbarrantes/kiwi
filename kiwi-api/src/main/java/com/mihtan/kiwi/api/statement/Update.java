@@ -11,17 +11,9 @@ public interface Update extends Statement<Update> {
 
     int execute();
 
-    Update mapKeys(String[] columnNames);
+    Update mapKeys(String... columnNames);
 
-    default Update mapKey(String columnName) {
-        return mapKeys(new String[]{columnName});
-    }
-
-    Update mapKeys(int[] columnIndexes);
-
-    default Update mapKey(int columnIndex) {
-        return mapKeys(new int[]{columnIndex});
-    }
+    Update mapKeys(int... columnIndexes);
 
     <T> List<T> executeAndGetKeys(RowMapper<T> rowMapper);
 
