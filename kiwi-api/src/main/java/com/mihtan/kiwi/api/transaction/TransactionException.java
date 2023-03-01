@@ -1,6 +1,7 @@
 package com.mihtan.kiwi.api.transaction;
 
 import com.mihtan.kiwi.api.KiwiException;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,11 +13,11 @@ public class TransactionException extends KiwiException {
         super(message);
     }
 
-    public TransactionException(String message, Throwable cause) {
+    public TransactionException(String message, SQLException cause) {
         super(message, cause);
     }
 
-    public TransactionException(Throwable cause) {
+    public TransactionException(SQLException cause) {
         super(cause);
     }
 

@@ -6,6 +6,8 @@ import com.mihtan.kiwi.api.statement.Query;
 import com.mihtan.kiwi.api.statement.StatementException;
 import com.mihtan.kiwi.core.result.RowIterableImpl;
 import java.sql.Connection;
+import static java.sql.ResultSet.CONCUR_READ_ONLY;
+import static java.sql.ResultSet.TYPE_FORWARD_ONLY;
 import java.sql.SQLException;
 
 /**
@@ -24,7 +26,7 @@ public class QueryImpl extends AbstractStatement<Query> implements Query {
 
     @Override
     public <T, R> R call(RowMapper<T> rowMapper, RowIterableCallback<T, R> callback) {
-        try ( var ps = connection.prepareStatement(sql)) {
+        try ( var ps = connection.prepareStatement(sql, TYPE_FORWARD_ONLY, CONCUR_READ_ONLY)) {
             applyParameters(ps);
             try ( var rs = ps.executeQuery()) {
                 return callback.call(new RowIterableImpl<>(rs, rowMapper));

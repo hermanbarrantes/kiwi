@@ -6,6 +6,8 @@ import com.mihtan.kiwi.api.result.RowIterableConsumer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
@@ -60,5 +62,9 @@ public interface Query extends Statement<Query> {
 
     default <T, A, R> R collect(RowMapper<T> rowMapper, Collector<? super T, A, R> collector) {
         return call(rowMapper, it -> it.stream().collect(collector));
+    }
+
+    default <T, R> R collect(RowMapper<T> rowMapper, Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
+        return call(rowMapper, it -> it.stream().collect(supplier, accumulator, combiner));
     }
 }
