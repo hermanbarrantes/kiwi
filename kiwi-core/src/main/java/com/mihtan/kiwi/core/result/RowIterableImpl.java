@@ -1,11 +1,13 @@
 package com.mihtan.kiwi.core.result;
 
+import com.mihtan.kiwi.api.mapper.Row;
 import com.mihtan.kiwi.api.mapper.RowMapper;
 import com.mihtan.kiwi.api.statement.StatementException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import com.mihtan.kiwi.api.result.RowIterable;
+import com.mihtan.kiwi.core.mapper.RowImpl;
 
 /**
  *
@@ -15,10 +17,12 @@ public class RowIterableImpl<T> implements RowIterable<T> {
 
     private final ResultSet resultSet;
     private final RowMapper<T> rowMapper;
+    private final Row row;
 
     public RowIterableImpl(ResultSet resultSet, RowMapper<T> rowMapper) {
         this.resultSet = resultSet;
         this.rowMapper = rowMapper;
+        this.row = new RowImpl(resultSet);
     }
 
     private boolean safeHasNext() {
@@ -43,7 +47,7 @@ public class RowIterableImpl<T> implements RowIterable<T> {
             @Override
             public T next() {
                 try {
-                    T result = rowMapper.map(resultSet);
+                    T result = rowMapper.map(row);
                     hasNext = safeHasNext();
                     return result;
                 } catch (SQLException ex) {

@@ -1,7 +1,7 @@
 package com.mihtan.kiwi.core
 
+import com.mihtan.kiwi.api.mapper.Row
 import com.mihtan.kiwi.api.mapper.RowMapper
-import java.sql.ResultSet
 
 /**
  *
@@ -9,13 +9,13 @@ import java.sql.ResultSet
  */
 class BookMapper implements RowMapper<Book> {
 
-    Book map(ResultSet rs) {
+    Book map(Row row) {
         Book book = new Book()
-        book.id = rs.getLong("book_id")
-        book.title = rs.getString("title")
-        book.author = rs.getString("author")
-        book.active = rs.getBoolean("active")
-        book.createdOn = rs.getTimestamp("created_on")
+        book.id = row.getLong("book_id")
+        book.title = row.getString("title")
+        book.author = row.getString("author")
+        book.active = row.getBoolean("active")
+        book.createdOn = row.getTimestamp("created_on")
         book
     }
 

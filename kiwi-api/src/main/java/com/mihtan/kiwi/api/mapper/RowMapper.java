@@ -1,6 +1,5 @@
 package com.mihtan.kiwi.api.mapper;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -9,5 +8,5 @@ import java.sql.SQLException;
  */
 public interface RowMapper<T> {
 
-    T map(ResultSet resultSet) throws SQLException;
+    T map(Row row) throws SQLException;
 }

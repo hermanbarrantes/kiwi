@@ -1,8 +1,10 @@
 package com.mihtan.kiwi.core.statement;
 
+import com.mihtan.kiwi.api.mapper.Row;
 import com.mihtan.kiwi.api.mapper.RowMapper;
 import com.mihtan.kiwi.api.statement.StatementException;
 import com.mihtan.kiwi.api.statement.Update;
+import com.mihtan.kiwi.core.mapper.RowImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -64,8 +66,9 @@ public class UpdateImpl extends AbstractStatement<Update> implements Update {
             }
             try ( var rs = ps.getGeneratedKeys()) {
                 List<T> keys = new ArrayList<>();
+                Row row = new RowImpl(rs);
                 while (rs.next()) {
-                    keys.add(rowMapper.map(rs));
+                    keys.add(rowMapper.map(row));
                 }
                 if (keys.isEmpty()) {
                     throw new StatementException("No keys generated");

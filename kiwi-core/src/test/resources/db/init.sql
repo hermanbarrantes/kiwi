@@ -1,4 +1,4 @@
-CREATE TABLE book (
+CREATE TABLE books (
     book_id serial PRIMARY KEY,
     title VARCHAR ( 50 ) UNIQUE NOT NULL,
     author VARCHAR ( 50 ) NOT NULL,
@@ -6,6 +6,6 @@ CREATE TABLE book (
     created_on TIMESTAMP NOT NULL
 );
 
-INSERT INTO book (title,author,active,created_on) VALUES ('Effective Java', 'Joshua Bloch',true,NOW());
-INSERT INTO book (title,author,active,created_on) VALUES ('Clean Code', 'Robert C. Martin',true,NOW());
-INSERT INTO book (title,author,active,created_on) VALUES ('Clean Architecture', 'Robert C. Martin',false,NOW());
+INSERT INTO books (title,author,active,created_on) VALUES ('Effective Java', 'Joshua Bloch', true, NOW());
+INSERT INTO books (title,author,active,created_on) VALUES ('Clean Code', 'Robert C. Martin', true, NOW());
+INSERT INTO books (title,author,active,created_on) VALUES ('Clean Architecture', 'Robert C. Martin', false, NOW());
