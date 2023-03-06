@@ -7,6 +7,7 @@ import com.zaxxer.hikari.HikariDataSource
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import javax.sql.DataSource
+import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.spock.Testcontainers
 import spock.lang.Shared
@@ -24,7 +25,14 @@ class KiwiTest extends Specification {
     .withDatabaseName("kiwi")
     .withUsername("username")
     .withPassword("secret")
-    .withInitScript("db/init.sql")
+    .withInitScript("db/postgresql.sql")
+    
+    /*@Shared
+    MySQLContainer mySQLContainer = new MySQLContainer(SpockTestImages.MYSQL_IMAGE)
+    .withDatabaseName("kiwi")
+    .withUsername("username")
+    .withPassword("secret")
+    .withInitScript("db/mysql.sql")*/
     
     static DataSource ds
     
@@ -35,6 +43,13 @@ class KiwiTest extends Specification {
         hikariConfig.setUsername(postgreSQLContainer.username)
         hikariConfig.setPassword(postgreSQLContainer.password)
         ds = new HikariDataSource(hikariConfig)
+        
+        /*HikariConfig hikariConfig = new HikariConfig()
+        hikariConfig.setDriverClassName(mySQLContainer.driverClassName)
+        hikariConfig.setJdbcUrl(mySQLContainer.jdbcUrl)
+        hikariConfig.setUsername(mySQLContainer.username)
+        hikariConfig.setPassword(mySQLContainer.password)
+        ds = new HikariDataSource(hikariConfig)*/
     }
     
     def "list all elements of a table"() {
