@@ -7,51 +7,28 @@ import com.zaxxer.hikari.HikariDataSource
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import javax.sql.DataSource
-import org.testcontainers.containers.MySQLContainer
-import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.spock.Testcontainers
-import spock.lang.Shared
+import org.testcontainers.containers.JdbcDatabaseContainer
 import spock.lang.Specification
 
 /**
  *
  * @author herman
  */
-@Testcontainers
-class KiwiTest extends Specification {
+abstract class AbstractKiwiIT extends Specification {
 
-    @Shared
-    PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer(SpockTestImages.POSTGRES_TEST_IMAGE)
-    .withDatabaseName("kiwi")
-    .withUsername("username")
-    .withPassword("secret")
-    .withInitScript("db/postgresql.sql")
-    
-    /*@Shared
-    MySQLContainer mySQLContainer = new MySQLContainer(SpockTestImages.MYSQL_IMAGE)
-    .withDatabaseName("kiwi")
-    .withUsername("username")
-    .withPassword("secret")
-    .withInitScript("db/mysql.sql")*/
-    
+    abstract JdbcDatabaseContainer getJdbcDatabaseContainer();
+
     static DataSource ds
-    
+
     def setupSpec() {
-        HikariConfig hikariConfig = new HikariConfig()
-        hikariConfig.setDriverClassName(postgreSQLContainer.driverClassName)
-        hikariConfig.setJdbcUrl(postgreSQLContainer.jdbcUrl)
-        hikariConfig.setUsername(postgreSQLContainer.username)
-        hikariConfig.setPassword(postgreSQLContainer.password)
+        def hikariConfig = new HikariConfig()
+        hikariConfig.setDriverClassName(jdbcDatabaseContainer.driverClassName)
+        hikariConfig.setJdbcUrl(jdbcDatabaseContainer.jdbcUrl)
+        hikariConfig.setUsername(jdbcDatabaseContainer.username)
+        hikariConfig.setPassword(jdbcDatabaseContainer.password)
         ds = new HikariDataSource(hikariConfig)
-        
-        /*HikariConfig hikariConfig = new HikariConfig()
-        hikariConfig.setDriverClassName(mySQLContainer.driverClassName)
-        hikariConfig.setJdbcUrl(mySQLContainer.jdbcUrl)
-        hikariConfig.setUsername(mySQLContainer.username)
-        hikariConfig.setPassword(mySQLContainer.password)
-        ds = new HikariDataSource(hikariConfig)*/
     }
-    
+
     def "list all elements of a table"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
@@ -61,11 +38,11 @@ class KiwiTest extends Specification {
             .query("SELECT * FROM books")
             .list(new BookMapper()))
 
-        then: "result is returned"
+        then: "the result is returned"
         !books.isEmpty()
         books.size() == 3
     }
-    
+
     def "list some elements of a table"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
@@ -77,11 +54,11 @@ class KiwiTest extends Specification {
             .setBoolean(active)
             .list(new BookMapper()))
 
-        then: "result is returned"
+        then: "the result is returned"
         !books.isEmpty()
         books.size() == 2
     }
-    
+
     def "list one element of a table"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
@@ -95,13 +72,13 @@ class KiwiTest extends Specification {
             .setBoolean(active)
             .one(new BookMapper()))
 
-        then: "result is returned"
+        then: "the result is returned"
         book != null
         book.id == id
         book.active == active
     }
-    
-    def "list one element of a table and throw result no found"() {
+
+    def "list one element of a table and throw result not found"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
         def id = 99 as long
@@ -114,11 +91,11 @@ class KiwiTest extends Specification {
             .setBoolean(active)
             .one(new BookMapper()))
 
-        then: "result is returned"
+        then: "the exception is returned"
         def ex = thrown(StatementException)
         ex.message == "Result not found"
     }
-    
+
     def "list one element of a table and throw too many results found"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
@@ -130,33 +107,33 @@ class KiwiTest extends Specification {
             .setBoolean(active)
             .one(new BookMapper()))
 
-        then: "result is returned"
+        then: "the exception is returned"
         def ex = thrown(StatementException)
         ex.message == "Too many results found"
     }
-    
-    def "insert one element of a table"() {
+
+    def "insert one element into the table"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
 
-        when: "querying the database"
+        when: "one element is inserted"
         def id = kiwi.call(handler -> handler
             .update("INSERT INTO books (title,author,active,created_on) VALUES (?,?,?,?)")
             .setString("TEST")
             .setString("TEST")
             .setBoolean(true)
             .setTimestamp(Timestamp.valueOf(LocalDateTime.now()))
-            .executeAndGetKey(row -> row.getLong("book_id")));
+            .executeAndGetKey(row -> row.getLong(1)));
 
-        then: "result is returned"
+        then: "the id is returned"
         id != null
     }
     
-    def "insert three elements of a table"() {
+    def "insert three elements into the table"() {
         given: "a Kiwi instance"
         def kiwi = Kiwi.create(ds)
 
-        when: "querying the database"
+        when: "three elements are inserted"
         def ids = kiwi.call(handler -> handler
             .update("INSERT INTO books (title,author,active,created_on) VALUES (?,?,?,?),(?,?,?,?),(?,?,?,?)")
             .setString("TEST 1")
@@ -171,10 +148,9 @@ class KiwiTest extends Specification {
             .setString("TEST 3")
             .setBoolean(true)
             .setTimestamp(Timestamp.valueOf(LocalDateTime.now()))
-            .mapKeys("book_id")
-            .executeAndGetKeys(row -> row.getLong("book_id")));
+            .executeAndGetKeys(row -> row.getLong(1)));
 
-        then: "result is returned"
+        then: "the ids are returned"
         !ids.isEmpty()
         ids.size() == 3
     }

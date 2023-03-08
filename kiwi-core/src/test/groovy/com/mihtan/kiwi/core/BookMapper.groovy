@@ -10,7 +10,7 @@ import com.mihtan.kiwi.api.mapper.RowMapper
 class BookMapper implements RowMapper<Book> {
 
     Book map(Row row) {
-        Book book = new Book()
+        def book = new Book()
         book.id = row.getLong("book_id")
         book.title = row.getString("title")
         book.author = row.getString("author")
