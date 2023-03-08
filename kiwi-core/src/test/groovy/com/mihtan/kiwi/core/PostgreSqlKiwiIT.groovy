@@ -38,6 +38,12 @@ class PostgreSqlKiwiIT extends AbstractKiwiIT {
 
         then: "the id is returned"
         id != null
+
+        cleanup:
+        kiwi.run(handler -> handler
+            .update("DELETE FROM books WHERE book_id = ?")
+            .setLong(id)
+            .execute())
     }
     
     def "insert three elements into the table with map key name"() {
@@ -65,6 +71,14 @@ class PostgreSqlKiwiIT extends AbstractKiwiIT {
         then: "the ids are returned"
         !ids.isEmpty()
         ids.size() == 3
+
+        cleanup:
+        kiwi.run(handler -> handler
+            .update("DELETE FROM books WHERE book_id IN (?,?,?)")
+            .setLong(ids[0])
+            .setLong(ids[1])
+            .setLong(ids[2])
+            .execute())
     }
 }
 
