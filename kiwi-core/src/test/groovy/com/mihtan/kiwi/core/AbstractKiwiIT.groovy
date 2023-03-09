@@ -1,5 +1,7 @@
 package com.mihtan.kiwi.core
 
+import com.mihtan.kiwi.api.Kiwi
+import com.mihtan.kiwi.api.KiwiBuilder
 import com.mihtan.kiwi.api.mapper.RowMapper
 import com.mihtan.kiwi.api.statement.StatementException
 import com.zaxxer.hikari.HikariConfig
@@ -28,10 +30,15 @@ abstract class AbstractKiwiIT extends Specification {
         hikariConfig.setPassword(jdbcDatabaseContainer.password)
         ds = new HikariDataSource(hikariConfig)
     }
+    
+    def kiwiHelper(DataSource ds) {
+        KiwiBuilder builder = new KiwiBuilderImpl();
+        return builder.withConnectionFactory(ds).build();
+    }
 
     def "list all elements of a table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def books = kiwi.call(handler -> handler
@@ -49,7 +56,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list some elements of a table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def books = kiwi.call(handler -> handler
@@ -65,7 +72,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list one element of a table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -80,7 +87,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list one element of a table and throw result not found"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -95,7 +102,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list one element of a table and throw too many results found"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -110,7 +117,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list first element of a table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -125,7 +132,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list first element of a table and get null when not found"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -139,7 +146,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "list first element of a table and get first when too many results found"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "querying the database"
         def book = kiwi.call(handler -> handler
@@ -154,7 +161,7 @@ abstract class AbstractKiwiIT extends Specification {
 
     def "insert one element into the table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "one element is inserted"
         def id = kiwi.call(handler -> handler
@@ -177,7 +184,7 @@ abstract class AbstractKiwiIT extends Specification {
     
     def "insert three elements into the table"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "three elements are inserted"
         def ids = kiwi.call(handler -> handler

@@ -1,4 +1,4 @@
-package com.mihtan.kiwi.api;
+package com.mihtan.kiwi.api.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
