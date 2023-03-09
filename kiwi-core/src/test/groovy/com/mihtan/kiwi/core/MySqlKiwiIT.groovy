@@ -13,7 +13,7 @@ import spock.lang.Shared
 class MySqlKiwiIT extends AbstractKiwiIT {
 
     @Shared
-    MySQLContainer mySQLContainer = new MySQLContainer("mysql:5.7.34")
+    MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.0")
     .withInitScript("db/mysql.sql")
 
     JdbcDatabaseContainer getJdbcDatabaseContainer() {

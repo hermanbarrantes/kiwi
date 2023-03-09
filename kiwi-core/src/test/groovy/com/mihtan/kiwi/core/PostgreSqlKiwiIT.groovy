@@ -15,7 +15,7 @@ import spock.lang.Shared
 class PostgreSqlKiwiIT extends AbstractKiwiIT {
 
     @Shared
-    PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:9.6.12")
+    PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:15.2")
     .withInitScript("db/postgresql.sql")
 
     JdbcDatabaseContainer getJdbcDatabaseContainer() {
@@ -24,7 +24,7 @@ class PostgreSqlKiwiIT extends AbstractKiwiIT {
     
     def "insert one element into the table with map key name"() {
         given: "a Kiwi instance"
-        def kiwi = Kiwi.create(ds)
+        def kiwi = kiwiHelper(ds)
 
         when: "one element is inserted"
         def id = kiwi.call(handler -> handler
