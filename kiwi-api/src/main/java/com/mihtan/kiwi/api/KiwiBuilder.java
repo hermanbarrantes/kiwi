@@ -2,6 +2,7 @@ package com.mihtan.kiwi.api;
 
 import com.mihtan.kiwi.api.connection.ConnectionFactory;
 import com.mihtan.kiwi.api.handler.HandlerFactory;
+import com.mihtan.kiwi.api.transaction.TransactionManager;
 import com.mihtan.kiwi.api.transaction.TransactionManagerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,6 +35,25 @@ public interface KiwiBuilder {
     }
 
     KiwiBuilder withTransactionManagerFactory(TransactionManagerFactory transactionManagerFactory);
+
+    default KiwiBuilder withTransactionManagerFactory() {
+        return withTransactionManagerFactory(connection -> new TransactionManager() {
+            @Override
+            public void begin() {
+                //do nothing
+            }
+
+            @Override
+            public void commit() {
+                //do nothing
+            }
+
+            @Override
+            public void rollback() {
+                //do nothing
+            }
+        });
+    }
 
     KiwiBuilder withHandlerFactory(HandlerFactory handlerFactory);
 

@@ -24,7 +24,7 @@ class PostgreSqlKiwiIT extends AbstractKiwiIT {
     
     def "insert one element into the table with map key name"() {
         given: "a Kiwi instance"
-        def kiwi = kiwiHelper(ds)
+        def kiwi = KiwiProvider.create(ds)
 
         when: "one element is inserted"
         def id = kiwi.call(handler -> handler
@@ -48,7 +48,7 @@ class PostgreSqlKiwiIT extends AbstractKiwiIT {
     
     def "insert three elements into the table with map key name"() {
         given: "a Kiwi instance"
-        def kiwi = kiwiHelper(ds)
+        def kiwi = KiwiProvider.create(ds)
 
         when: "three elements are inserted"
         def ids = kiwi.call(handler -> handler
