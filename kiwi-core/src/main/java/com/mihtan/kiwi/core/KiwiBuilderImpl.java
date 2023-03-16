@@ -41,11 +41,4 @@ public class KiwiBuilderImpl implements KiwiBuilder {
         return new KiwiImpl(connectionFactory, transactionManagerFactory, handlerFactory);
     }
 
-    /*public static KiwiImpl create(ConnectionFactory connectionSupplier) {
-        return new KiwiBuilder(connectionSupplier).build();
-    }
-
-    public static KiwiImpl create(DataSource dataSource) {
-        return create(dataSource::getConnection);
-    }*/
 }

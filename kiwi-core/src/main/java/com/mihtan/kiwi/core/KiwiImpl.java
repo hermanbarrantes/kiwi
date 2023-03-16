@@ -30,8 +30,9 @@ public class KiwiImpl implements Kiwi {
 
     @Override
     public <T> T call(HandlerCallback<T> callback) {
+        Connection connection = null;
         try {
-            Connection connection = connectionFactory.openConnection();
+            connection = connectionFactory.openConnection();
             TransactionManager transactionManager = transactionManagerFactory.create(connection);
             Handler handler = handlerFactory.create(connection);
             try {
@@ -39,14 +40,18 @@ public class KiwiImpl implements Kiwi {
                 T result = callback.call(handler);
                 transactionManager.commit();
                 return result;
-            } catch (Exception ex) {
+            } catch (Throwable th) {
                 transactionManager.rollback();
-                throw ex;
-            } finally {
-                connectionFactory.closeConnection(connection);
+                throw th;
             }
         } catch (SQLException ex) {
             throw new KiwiException(ex);
+        } finally {
+            try {
+                connectionFactory.closeConnection(connection);
+            } catch (SQLException ex) {
+                throw new KiwiException(ex);
+            }
         }
     }
 
