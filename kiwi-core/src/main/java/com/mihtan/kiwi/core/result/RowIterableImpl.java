@@ -2,12 +2,12 @@ package com.mihtan.kiwi.core.result;
 
 import com.mihtan.kiwi.api.mapper.Row;
 import com.mihtan.kiwi.api.mapper.RowMapper;
+import com.mihtan.kiwi.api.result.RowIterable;
 import com.mihtan.kiwi.api.statement.StatementException;
+import com.mihtan.kiwi.core.mapper.RowImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import com.mihtan.kiwi.api.result.RowIterable;
-import com.mihtan.kiwi.core.mapper.RowImpl;
 
 /**
  *

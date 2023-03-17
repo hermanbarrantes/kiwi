@@ -24,6 +24,7 @@ public class UpdateImpl extends AbstractStatement<Update> implements Update {
         PreparedStatement apply(Connection connection) throws SQLException;
     }
 
+    private static final String MSG_NO_KEYS_GENERATED = "No keys generated";
     private final Connection connection;
     private final String sql;
     private PreparedStatementStrategy strategy;
@@ -62,7 +63,7 @@ public class UpdateImpl extends AbstractStatement<Update> implements Update {
             applyParameters(ps);
             int rowCount = ps.executeUpdate();
             if (rowCount < 1) {
-                throw new StatementException("No keys generated");
+                throw new StatementException(MSG_NO_KEYS_GENERATED);
             }
             try ( var rs = ps.getGeneratedKeys()) {
                 List<T> keys = new ArrayList<>();
@@ -71,7 +72,7 @@ public class UpdateImpl extends AbstractStatement<Update> implements Update {
                     keys.add(rowMapper.map(row));
                 }
                 if (keys.isEmpty()) {
-                    throw new StatementException("No keys generated");
+                    throw new StatementException(MSG_NO_KEYS_GENERATED);
                 } else {
                     return keys;
                 }
