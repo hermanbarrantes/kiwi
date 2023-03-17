@@ -8,6 +8,7 @@ import com.mihtan.kiwi.core.statement.CallImpl;
 import com.mihtan.kiwi.core.statement.QueryImpl;
 import com.mihtan.kiwi.core.statement.UpdateImpl;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -19,6 +20,17 @@ public class HandlerImpl implements Handler {
 
     public HandlerImpl(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return iface.isInstance(connection) ? (T) connection : connection.unwrap(iface);
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return iface.isInstance(connection) ? true : connection.isWrapperFor(iface);
     }
 
     @Override
