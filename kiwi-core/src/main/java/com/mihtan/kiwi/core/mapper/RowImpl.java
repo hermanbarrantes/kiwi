@@ -1,5 +1,6 @@
 package com.mihtan.kiwi.core.mapper;
 
+import com.mihtan.kiwi.api.mapper.Row;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -14,8 +15,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Optional;
-import com.mihtan.kiwi.api.mapper.Row;
 
 /**
  *
@@ -71,18 +70,6 @@ public class RowImpl implements Row {
     }
 
     @Override
-    public Optional<Boolean> getOptionalBoolean(int columnIndex) throws SQLException {
-        var value = resultSet.getBoolean(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Boolean> getOptionalBoolean(String columnLabel) throws SQLException {
-        var value = resultSet.getBoolean(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
     public byte getByte(int columnIndex) throws SQLException {
         return resultSet.getByte(columnIndex);
     }
@@ -90,18 +77,6 @@ public class RowImpl implements Row {
     @Override
     public byte getByte(String columnLabel) throws SQLException {
         return resultSet.getByte(columnLabel);
-    }
-
-    @Override
-    public Optional<Byte> getOptionalByte(int columnIndex) throws SQLException {
-        var value = resultSet.getByte(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Byte> getOptionalByte(String columnLabel) throws SQLException {
-        var value = resultSet.getByte(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
     }
 
     @Override
@@ -115,18 +90,6 @@ public class RowImpl implements Row {
     }
 
     @Override
-    public Optional<Short> getOptionalShort(int columnIndex) throws SQLException {
-        var value = resultSet.getShort(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Short> getOptionalShort(String columnLabel) throws SQLException {
-        var value = resultSet.getShort(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
     public int getInt(int columnIndex) throws SQLException {
         return resultSet.getInt(columnIndex);
     }
@@ -134,18 +97,6 @@ public class RowImpl implements Row {
     @Override
     public int getInt(String columnLabel) throws SQLException {
         return resultSet.getInt(columnLabel);
-    }
-
-    @Override
-    public Optional<Integer> getOptionalInteger(int columnIndex) throws SQLException {
-        var value = resultSet.getInt(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Integer> getOptionalInteger(String columnLabel) throws SQLException {
-        var value = resultSet.getInt(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
     }
 
     @Override
@@ -159,18 +110,6 @@ public class RowImpl implements Row {
     }
 
     @Override
-    public Optional<Long> getOptionalLong(int columnIndex) throws SQLException {
-        var value = resultSet.getLong(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Long> getOptionalLong(String columnLabel) throws SQLException {
-        var value = resultSet.getLong(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
     public float getFloat(int columnIndex) throws SQLException {
         return resultSet.getFloat(columnIndex);
     }
@@ -181,18 +120,6 @@ public class RowImpl implements Row {
     }
 
     @Override
-    public Optional<Float> getOptionalFloat(int columnIndex) throws SQLException {
-        var value = resultSet.getFloat(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Float> getOptionalFloat(String columnLabel) throws SQLException {
-        var value = resultSet.getFloat(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
     public double getDouble(int columnIndex) throws SQLException {
         return resultSet.getDouble(columnIndex);
     }
@@ -200,18 +127,6 @@ public class RowImpl implements Row {
     @Override
     public double getDouble(String columnLabel) throws SQLException {
         return resultSet.getDouble(columnLabel);
-    }
-
-    @Override
-    public Optional<Double> getOptionalDouble(int columnIndex) throws SQLException {
-        var value = resultSet.getDouble(columnIndex);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
-    }
-
-    @Override
-    public Optional<Double> getOptionalDouble(String columnLabel) throws SQLException {
-        var value = resultSet.getDouble(columnLabel);
-        return resultSet.wasNull() ? Optional.empty() : Optional.of(value);
     }
 
     @Override

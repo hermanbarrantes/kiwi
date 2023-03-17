@@ -23,7 +23,7 @@ import java.util.Optional;
 public interface Row extends Wrapper {
 
     ResultSetMetaData getMetaData() throws SQLException;
-    
+
     boolean wasNull() throws SQLException;
 
     String getString(int columnIndex) throws SQLException;
@@ -34,57 +34,99 @@ public interface Row extends Wrapper {
 
     boolean getBoolean(String columnLabel) throws SQLException;
 
-    Optional<Boolean> getOptionalBoolean(int columnIndex) throws SQLException;
+    default Optional<Boolean> getOptionalBoolean(int columnIndex) throws SQLException {
+        var value = getBoolean(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Boolean> getOptionalBoolean(String columnLabel) throws SQLException;
+    default Optional<Boolean> getOptionalBoolean(String columnLabel) throws SQLException {
+        var value = getBoolean(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     byte getByte(int columnIndex) throws SQLException;
 
     byte getByte(String columnLabel) throws SQLException;
 
-    Optional<Byte> getOptionalByte(int columnIndex) throws SQLException;
+    default Optional<Byte> getOptionalByte(int columnIndex) throws SQLException {
+        var value = getByte(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Byte> getOptionalByte(String columnLabel) throws SQLException;
+    default Optional<Byte> getOptionalByte(String columnLabel) throws SQLException {
+        var value = getByte(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     short getShort(int columnIndex) throws SQLException;
 
     short getShort(String columnLabel) throws SQLException;
 
-    Optional<Short> getOptionalShort(int columnIndex) throws SQLException;
+    default Optional<Short> getOptionalShort(int columnIndex) throws SQLException {
+        var value = getShort(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Short> getOptionalShort(String columnLabel) throws SQLException;
+    default Optional<Short> getOptionalShort(String columnLabel) throws SQLException {
+        var value = getShort(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     int getInt(int columnIndex) throws SQLException;
 
     int getInt(String columnLabel) throws SQLException;
 
-    Optional<Integer> getOptionalInteger(int columnIndex) throws SQLException;
+    default Optional<Integer> getOptionalInteger(int columnIndex) throws SQLException {
+        var value = getInt(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Integer> getOptionalInteger(String columnLabel) throws SQLException;
+    default Optional<Integer> getOptionalInteger(String columnLabel) throws SQLException {
+        var value = getInt(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     long getLong(int columnIndex) throws SQLException;
 
     long getLong(String columnLabel) throws SQLException;
 
-    Optional<Long> getOptionalLong(int columnIndex) throws SQLException;
+    default Optional<Long> getOptionalLong(int columnIndex) throws SQLException {
+        var value = getLong(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Long> getOptionalLong(String columnLabel) throws SQLException;
+    default Optional<Long> getOptionalLong(String columnLabel) throws SQLException {
+        var value = getLong(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     float getFloat(int columnIndex) throws SQLException;
 
     float getFloat(String columnLabel) throws SQLException;
 
-    Optional<Float> getOptionalFloat(int columnIndex) throws SQLException;
+    default Optional<Float> getOptionalFloat(int columnIndex) throws SQLException {
+        var value = getFloat(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Float> getOptionalFloat(String columnLabel) throws SQLException;
+    default Optional<Float> getOptionalFloat(String columnLabel) throws SQLException {
+        var value = getFloat(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     double getDouble(int columnIndex) throws SQLException;
 
     double getDouble(String columnLabel) throws SQLException;
 
-    Optional<Double> getOptionalDouble(int columnIndex) throws SQLException;
+    default Optional<Double> getOptionalDouble(int columnIndex) throws SQLException {
+        var value = getDouble(columnIndex);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
-    Optional<Double> getOptionalDouble(String columnLabel) throws SQLException;
+    default Optional<Double> getOptionalDouble(String columnLabel) throws SQLException {
+        var value = getDouble(columnLabel);
+        return wasNull() ? Optional.empty() : Optional.of(value);
+    }
 
     byte[] getBytes(int columnIndex) throws SQLException;
 
