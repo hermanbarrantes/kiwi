@@ -1,10 +1,12 @@
 package com.mihtan.kiwi.core.statement;
 
+import com.mihtan.kiwi.api.mapper.OutputMapper;
 import com.mihtan.kiwi.api.statement.Call;
+import com.mihtan.kiwi.api.statement.CallParameterSetter;
 import com.mihtan.kiwi.api.statement.StatementException;
+import com.mihtan.kiwi.core.mapper.OutputImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
-import com.mihtan.kiwi.api.statement.CallParameterSetter;
 
 /**
  *
@@ -26,10 +28,11 @@ public class CallImpl extends AbstractStatement<Call> implements Call {
     }
 
     @Override
-    public void execute() {
+    public <T> T invoke(OutputMapper<T> outputMapper) {
         try ( var cs = connection.prepareCall(sql)) {
             applyParameters(cs);//TODO check
-            cs.executeUpdate();
+            cs.execute();
+            return outputMapper.map(new OutputImpl(cs));
         } catch (SQLException ex) {
             throw new StatementException(ex);
         }

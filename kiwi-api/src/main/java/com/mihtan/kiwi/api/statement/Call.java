@@ -1,11 +1,14 @@
 package com.mihtan.kiwi.api.statement;
 
+import com.mihtan.kiwi.api.mapper.Output;
+import com.mihtan.kiwi.api.mapper.OutputMapper;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.function.Consumer;
 
 /**
  *
@@ -13,7 +16,18 @@ import java.sql.Types;
  */
 public interface Call extends Statement<Call> {
 
-    void execute();
+    <T> T invoke(OutputMapper<T> outputMapper);
+
+    default void invoke() {
+        invoke(output -> null);
+    }
+
+    default void invoke(Consumer<Output> consumer) {
+        invoke(output -> {
+            consumer.accept(output);
+            return null;
+        });
+    }
 
     Call setParamenter(CallParameterSetter parameterSetter);
 
