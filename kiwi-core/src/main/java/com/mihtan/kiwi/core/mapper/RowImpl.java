@@ -29,14 +29,17 @@ public class RowImpl implements Row {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return iface.isInstance(resultSet) ? (T) resultSet : resultSet.unwrap(iface);
+        return iface != null && iface.isInstance(resultSet)
+                ? iface.cast(resultSet)
+                : resultSet.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return iface.isInstance(resultSet) ? true : resultSet.isWrapperFor(iface);
+        return iface != null && iface.isInstance(resultSet)
+                ? true
+                : resultSet.isWrapperFor(iface);
     }
 
     @Override

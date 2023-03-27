@@ -23,14 +23,17 @@ public class HandlerImpl implements Handler {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return iface.isInstance(connection) ? (T) connection : connection.unwrap(iface);
+        return iface != null && iface.isInstance(connection)
+                ? iface.cast(connection)
+                : connection.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return iface.isInstance(connection) ? true : connection.isWrapperFor(iface);
+        return iface != null && iface.isInstance(connection)
+                ? true
+                : connection.isWrapperFor(iface);
     }
 
     @Override

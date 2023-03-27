@@ -28,14 +28,17 @@ public class OutputImpl implements Output {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return iface.isInstance(callableStatement) ? (T) callableStatement : callableStatement.unwrap(iface);
+        return iface != null && iface.isInstance(callableStatement)
+                ? iface.cast(callableStatement)
+                : callableStatement.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return iface.isInstance(callableStatement) ? true : callableStatement.isWrapperFor(iface);
+        return iface != null && iface.isInstance(callableStatement)
+                ? true
+                : callableStatement.isWrapperFor(iface);
     }
 
     @Override
